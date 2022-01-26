@@ -1,0 +1,123 @@
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covid-19</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+</head>
+<body style="text-align: center;">
+    {% if sorted_template_data %} 
+        {% if select_date %}  
+        <form method="POST" class="form-group">
+            {% csrf_token %}
+            <label for="date">Date : </label>
+            <select name="date" id="date">
+                    {% for date in date_list %}
+                        {% if date == select_date %}     
+                            <option selected>{{ date }}</option>
+                        {% else %}
+                            <option>{{ date }}</option>
+                        {% endif %}
+                    {% endfor %}
+            <input type="submit" value="Submit">
+        </form>  
+        {% else %}
+        <form method="POST" class="form-group">
+            {% csrf_token %}
+            <label for="date">Date : </label>
+            <select name="date" id="date">
+                    {% for date in date_list %}        
+                        <option>{{ date }}</option>
+                    {% endfor %}
+            <input type="submit" value="Submit">
+        </form>  
+        {% endif %}
+      <div class="col-ml-8">
+        <canvas id="myChart" height="10000" width="1500"></canvas>
+        <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [{% for country,case in sorted_template_data.items %} '{{ country }}', {% endfor %}],
+                datasets: [{
+                    label: 'Number of Cases',                
+                    barPercentage: 0.4,
+                    barThickness: 50,
+                    maxBarThickness: 100,
+                    minBarLength: 2,
+                    data:[{% for country,case in sorted_template_data.items %} '{{ case }}', {% endfor %}],
+                    backgroundColor: [
+                        '#677BF7',
+                        '#1391D6',
+                        '#C90DAE',
+                        '#40EC09',
+                        '#4771E9',
+                        '#58F5B9',
+                        '#8761AF',
+                        '#B49865',
+                        '#F5E0DF',
+                        '#CFA32B',
+                        '#752A86',
+                        '#69AAED',
+                        '#B43451',
+                        '#4BAF54',
+                        '#54A5AF',
+                        '#D1B21F',
+                        '#E90EA9',
+                        '#B78EF7',
+                        '#59B14A',
+                        '#49945D',
+                        '#2985A7',
+                        '#912F49',
+                        '#381381',
+                        '#1FDD43',
+                    ],
+                }]
+            },
+            plugins: [ChartDataLabels],
+            options: {
+                indexAxis: 'y',
+                responsive:false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    },
+                },
+                plugins: {
+                    datalabels: {
+                        color: '#000000',
+                        anchor:'start',
+                        align: 'end',
+                        offset: 5,
+                        formatter: function(value) {
+                        return  value + ' Cases';
+                        }
+                    },
+                    legend: {
+                        title: {
+                            display: true,
+                            text: 'Covid Global Cases by SGN',
+                            font: {
+                                size: 50
+                            },
+                        },
+                    },
+                },
+            }
+        });
+        </script>  
+    </div>
+    {% endif %}
+</body>
+
+
+</html>

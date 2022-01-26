@@ -1,0 +1,300 @@
+@font-face {
+    font-family: 'Poppins-Bold';
+    src: local('PP-Bold'),
+         url('../fonts/Poppins-Bold.ttf') format("truetype");
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: local('PP-Black'),
+      url('../fonts/Poppins-Black.ttf') format("truetype");
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+.main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* ##################### Home ##################### */
+
+.login_box{
+    height: 500px;
+    width: 960px;
+    background-color:whitesmoke;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    padding: 1%;
+}
+
+.input_box{
+    margin-top: 70px;
+}
+
+.text_btn:active,.text_btn:hover,.text_btn:visited,.text_btn:link {
+    color: white;
+    background-color: transparent;
+}
+
+.login_title{
+    font-family: Poppins-Bold;
+    font-size: 24px;
+    width: 100%;
+    display: block;
+    padding-bottom: 20px;
+}
+
+.login_logo{
+    float: left;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.wrap-input{
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+
+}
+
+
+.input {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #666666;
+    display: block;
+    background: #e6e6e6;
+    height: 50px;
+    border-radius: 25px;
+    padding: 0 30px 0 68px;
+    outline: none;
+    border: none;
+}
+
+.symbol{
+    display: flex;
+    position: absolute;
+    padding-left: 30px;
+    font-size: larger;
+}
+
+.login_button{
+    background-color:#87CEEB;
+    width: 30%;
+    height: 60px;
+    border-radius: 25px;
+    font-family: Poppins-Bold;
+    cursor: pointer;
+}
+
+.login_footer{
+    margin-top: 30px;
+    width: 100%;
+    text-align: left;
+    font-family: Poppins;
+    cursor: pointer;
+}
+
+/* ##################### Home ##################### */
+
+
+/* #################### Task ###################### */
+
+
+.nav-link:hover{
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.411);
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    color: white !important;
+}
+.close{
+    font-size: 15px!important;
+}
+
+.signout_btn{
+    float: right;
+    margin: 7px;
+}
+
+.text_signout{
+    color: #ff251a;
+}
+
+.btn{
+    background-color: whitesmoke;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-header{
+    font-size: 20px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 17px;
+}
+
+.addtask_close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+  
+.addtask_close:hover{
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.addtask_close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.search_bar{
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+
+}
+
+.btn.btn-primary.search_btn{
+    vertical-align:0!important;
+    background-color: #f8f9fa;
+    border: #f8f9fa;
+    color: black;
+}
+
+.btn.btn-info:focus{
+    background-color: #17a2b8!important;
+    color: white;
+}
+
+.form-control.input_search{
+    width: 35%;
+    display: inline!important;
+}
+
+.submit-search{
+    position: absolute;
+}
+
+.task{
+    padding:7%;
+    padding-top: 30px;
+
+}
+
+.btn.btn-info{
+    width: 60%;
+    text-align: left!important;
+    margin-bottom: 20px!important;
+    left: 50%;
+    transform: translate(35%, 0%);
+}
+
+.btn.btn-primary.submitupdateform{
+    margin-bottom: 10px!important;
+}
+
+.delete_btn{
+ margin-bottom: 10px;
+ float: right;
+}
+
+.reviewcheck{
+    margin-top: 20px!important;
+}
+
+
+.zone{
+    margin-left: 30px;
+}
+
+.zone_task_count{
+    float: right;
+}
+
+.zone_task_assign{
+    float: right;
+}
+
+@media only screen and (max-width: 390px) { 
+    .sayhi{
+        font-size: 22px;
+        position: absolute;
+        margin-top: 20px;
+    }
+    
+    .sayhi_position{
+        font-size: 17px!important;
+        position: absolute;
+    }
+
+    .text_btn{
+        font-size: 10px;
+    }
+
+    .text_signout{
+        font-size: 10px;
+    }
+
+    .report_box {
+        padding: 20px;
+        height: 100%;
+    }
+
+    .btn.btn-info{
+        width: 100%;
+        text-align: left!important;
+        margin-bottom: 20px!important;
+        left: 50%;
+        transform: translate(2%, 0%);
+    }
+    
+    .btn.report {
+        width: 115px;
+        height: 100px;
+        background-color: pink;
+        border-radius: 10px;
+        font-size: 10px;
+    }
+
+    .zone_task_assign{
+        display: none;
+    }
+}

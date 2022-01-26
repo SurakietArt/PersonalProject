@@ -1,0 +1,364 @@
+{% extends 'mechanic/base.html' %}
+{% block content %}
+{% load static %}
+    <head>
+        <title>Task : Aircraft Maintenance</title>
+    </head>
+    <div class="task" id="task">
+        <a href="#cockpit" class="btn btn-info" data-toggle="collapse"><span>Cockpit</span><span class="zone_task_count">Total : {{ cockpit_count }}</span></a>
+        <div id="cockpit" class="collapse zone">
+            {% for cockpits in cockpit %}
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ cockpits.id }}"><span class="text_btn">Task ID {{ cockpits.id }} : {{ cockpits.Task_name }}</span><span class="zone_task_assign">Assign To : {{ cockpits.Assign }}</span></button>
+            <div id="{{ cockpits.id }}" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content"> 
+                        <form method="POST" class="form-group">
+                            {% csrf_token %}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                            <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ cockpits.id }}" hidden>
+                            <label for="id_Task_name">Task name:</label> <input disabled type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ cockpits.Task_name }}">
+                            <label for="id_Zone">Zone:</label> <input disabled type="text" name="Zone" class="form-control" maxlength="127" id="id_Zone"  value="{{ cockpits.Zone }}">
+                            <label for="id_Task_Detail">Task Detail:</label> <textarea disabled name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ cockpits.Task_Detail }}</textarea>
+                            <label for="id_Task_Detail">Task Performed:</label> <textarea name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ cockpits.Task_Performed }}</textarea>
+                            <label for="id_DueDate">DueDate: {{ cockpits.DueDate|date:"D d M Y" }}</label>
+                            <label for="id_Assign">Assign:</label> <select disabled name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ cockpits.Assign }}">
+                                {% for mechanics in mechanic %}
+                                    {% if mechanics.first_name == cockpits.Assign %}
+                                        <option selected>ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% else %}
+                                        <option >ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% endif %}
+                                {% endfor %}
+                            {% if cockpits.Reviewed == True %}
+                            <input class="reviewcheck" type="checkbox" disabled checked id="Reviewed" name="Reviewed" disabled value="{{ cockpits.Reviewed|yesno:"False,True" }}">
+                            {% else %}    
+                            <input class="reviewcheck" type="checkbox" disabled id="Reviewed" name="Reviewed" disabled value="{{ cockpits.Reviewed|yesno:"False,True" }}">
+                            {% endif %} 
+                            <label for="Reviewed"> Reviewed </label><br>    
+                            <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform"><br>
+                            <label >Task Create By: {{ cockpits.CreateBy }}</label><br>
+                            <label >Last Update: {{ cockpits.Update_Date|date:"D d M Y H:i" }} By 
+                                {% if cockpits.Update_By == '' %}
+                                    NONE
+                                {% else %}
+                                    ID {{ cockpits.Update_By_ID }} : {{ cockpits.Update_By }}
+                                {% endif %}   </label>                          
+                        </form>
+                    </div>
+                </div>
+            </div>    
+            {% endfor %}
+        </div>
+        <br>
+        <a href="#cabin" class="btn btn-info" data-toggle="collapse"><span>Cabin</span><span class="zone_task_count">Total : {{ cabin_count }}</span></a>
+        <div id="cabin" class="collapse zone">
+            {% for cabins in cabin %}
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ cabins.id }}"><span class="text_btn">Task ID {{ cabins.id }} : {{ cabins.Task_name }}</span><span class="zone_task_assign">Assign To : {{ cabins.Assign }}</span></button>
+            <div id="{{ cabins.id }}" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content"> 
+                        <form method="POST" class="form-group">
+                            {% csrf_token %}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                            <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ cabins.id }}" hidden>
+                            <label for="id_Task_name">Task name:</label> <input disabled type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ cabins.Task_name }}">
+                            <label for="id_Task_Detail">Task Detail:</label> <textarea disabled name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ cabins.Task_Detail }}</textarea>
+                            <label for="id_Task_Detail">Task Performed:</label> <textarea name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ cabins.Task_Performed }}</textarea>
+                            <label for="id_DueDate">DueDate: {{ cabins.DueDate|date:"D d M Y" }}</label>
+                            <label for="id_Assign">Assign:</label> <select disabled  name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ cabins.Assign }}">
+                                {% for mechanics in mechanic %}
+                                    {% if mechanics.first_name == cabins.Assign %}
+                                        <option selected>ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% else %}
+                                        <option >ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% endif %}
+                                {% endfor %}
+                            {% if cabins.Reviewed == True %}
+                            <input class="reviewcheck" type="checkbox" disabled checked id="Reviewed" name="Reviewed" value="{{ cabins.Reviewed|yesno:"False,True" }}">
+                            {% else %}    
+                            <input class="reviewcheck" type="checkbox" disabled id="Reviewed" name="Reviewed" value="{{ cabins.Reviewed|yesno:"False,True" }}">
+                            {% endif %} 
+                            <label for="Reviewed"> Reviewed </label><br>    
+                            <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform"><br>
+                            <label >Task Create By: {{ cabins.CreateBy }}</label><br>
+                            <label >Last Update: {{ cockpits.Update_Date|date:"D d M Y H:i" }} By:
+                                {% if cabins.Update_By == '' %}
+                                    NONE
+                                {% else %}
+                                    {{ cabins.Update_By }}
+                                {% endif %}   </label>                          
+                        </form>
+                    </div>
+                </div>
+            </div>    
+            {% endfor %}
+        </div>
+        <br>
+        <a href="#Wing" class="btn btn-info" data-toggle="collapse"><span>Wing</span><span class="zone_task_count">Total : {{ wing_count }}</span></a>
+        <div id="Wing" class="collapse zone">
+            {% for wings in wing %}
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ wings.id }}"><span class="text_btn">Task ID {{ wings.id }} : {{ wings.Task_name }}</span><span class="zone_task_assign">Assign To : {{ wings.Assign }}</span></button>
+            <div id="{{ wings.id }}" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content"> 
+                        <form method="POST" class="form-group">
+                            {% csrf_token %}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                            <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ wings.id }}" hidden>
+                            <label for="id_Task_name">Task name:</label> <input disabled type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ wings.Task_name }}">
+                            <label for="id_Task_Detail">Task Detail:</label> <textarea disabled name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ wings.Task_Detail }}</textarea>
+                            <label for="id_Task_Detail">Task Performed:</label> <textarea name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ wings.Task_Performed }}</textarea>
+                            <label for="id_DueDate">DueDate: {{ wings.DueDate|date:"D d M Y" }}</label>
+                            <label for="id_Assign">Assign:</label> <select disabled name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ wings.Assign }}">
+                                {% for mechanics in mechanic %}
+                                    {% if mechanics.first_name == wings.Assign %}
+                                        <option selected>ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% else %}
+                                        <option >ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% endif %}
+                                {% endfor %}
+                            {% if wings.Reviewed == True %}
+                            <input class="reviewcheck" type="checkbox" disabled checked id="Reviewed" name="Reviewed" value="{{ wings.Reviewed|yesno:"False,True" }}">
+                            {% else %}    
+                            <input class="reviewcheck" type="checkbox" disabled id="Reviewed" name="Reviewed" value="{{ wings.Reviewed|yesno:"False,True" }}">
+                            {% endif %} 
+                            <label for="Reviewed"> Reviewed </label><br>    
+                            <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform"><br>
+                            <label >Task Create By: {{ wings.CreateBy }}</label><br>
+                            <label >Last Update: {{ cockpits.Update_Date|date:"D d M Y H:i" }} By:
+                                {% if wings.Update_By == '' %}
+                                    NONE
+                                {% else %}
+                                    {{ wings.Update_By }}
+                                {% endif %}   </label>                          
+                        </form>
+                    </div>
+                </div>
+            </div>    
+            {% endfor %}
+        </div>
+        <br>
+        <a href="#landinggear" class="btn btn-info" data-toggle="collapse"><span>Landing Gear</span><span class="zone_task_count">Total : {{ landinggear_count }}</span></a>
+        <div id="landinggear" class="collapse zone">
+            {% for landinggears in landinggear %}
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ landinggears.id }}"><span class="text_btn">Task ID {{ landinggears.id }} : {{ landinggears.Task_name }}</span><span class="zone_task_assign">Assign To : {{ landinggears.Assign }}</span></button>
+            <div id="{{ landinggears.id }}" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content"> 
+                        <form method="POST" class="form-group">
+                            {% csrf_token %}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                            <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ landinggears.id }}" hidden>
+                            <label for="id_Task_name">Task name:</label> <input disabled type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ landinggears.Task_name }}">
+                            <label for="id_Task_Detail">Task Detail:</label> <textarea disabled name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ landinggears.Task_Detail }}</textarea>
+                            <label for="id_Task_Detail">Task Performed:</label> <textarea disabled name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ landinggears.Task_Performed }}</textarea>
+                            <label for="id_DueDate">DueDate: {{ landinggears.DueDate|date:"D d M Y" }}</label>
+                            <label for="id_Assign">Assign:</label> <select disabled name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ landinggears.Assign }}">
+                                {% for mechanics in mechanic %}
+                                    {% if mechanics.first_name == landinggears.Assign %}
+                                        <option selected>ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% else %}
+                                        <option >ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% endif %}
+                                {% endfor %}
+                            {% if landinggears.Reviewed == True %}
+                            <input class="reviewcheck" type="checkbox" disabled checked id="Reviewed" name="Reviewed" value="{{ landinggears.Reviewed|yesno:"False,True" }}">
+                            {% else %}    
+                            <input class="reviewcheck" type="checkbox" disabled id="Reviewed" name="Reviewed" value="{{ landinggears.Reviewed|yesno:"False,True" }}">
+                            {% endif %} 
+                            <label for="Reviewed"> Reviewed </label><br>    
+                            <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform"><br>
+                            <label >Task Create By: {{ landinggears.CreateBy }}</label><br>
+                            <label >Last Update: {{ cockpits.Update_Date|date:"D d M Y H:i" }} By:
+                                {% if landinggears.Update_By == '' %}
+                                    NONE
+                                {% else %}
+                                    {{ landinggears.Update_By }}
+                                {% endif %}   </label>                          
+                        </form>
+                    </div>
+                </div>
+            </div>    
+            {% endfor %}
+        </div>
+        <br>
+        <a href="#fuselage" class="btn btn-info" data-toggle="collapse"><span>Fuselage</span><span class="zone_task_count">Total : {{ fuselage_count }}</span></a>
+        <div id="fuselage" class="collapse zone">
+            {% for fuselages in fuselage %}
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ fuselages.id }}"><span class="text_btn">Task ID {{ fuselages.id }} : {{ fuselages.Task_name }}</span><span class="zone_task_assign">Assign To : {{ fuselages.Assign }}</span></button>
+            <div id="{{ fuselages.id }}" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content"> 
+                        <form method="POST" class="form-group">
+                            {% csrf_token %}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                            <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ fuselages.id }}" hidden>
+                            <label for="id_Task_name">Task name:</label> <input disabled type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ fuselages.Task_name }}">
+                            <label for="id_Task_Detail">Task Detail:</label> <textarea disabled name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ fuselages.Task_Detail }}</textarea>
+                            <label for="id_Task_Detail">Task Performed:</label> <textarea name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ fuselages.Task_Performed }}</textarea>
+                            <label for="id_DueDate">DueDate: {{ fuselages.DueDate|date:"D d M Y" }}</label>
+                            <label for="id_Assign">Assign:</label> <select disabled  name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ fuselages.Assign }}">
+                                {% for mechanics in mechanic %}
+                                    {% if mechanics.first_name == fuselages.Assign %}
+                                        <option selected>ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% else %}
+                                        <option >ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% endif %}
+                                {% endfor %}
+                            {% if fuselages.Reviewed == True %}
+                            <input class="reviewcheck" type="checkbox" disabled checked id="Reviewed" name="Reviewed" value="{{ fuselages.Reviewed|yesno:"False,True" }}">
+                            {% else %}    
+                            <input class="reviewcheck" type="checkbox" disabled id="Reviewed" name="Reviewed" value="{{ fuselages.Reviewed|yesno:"False,True" }}">
+                            {% endif %} 
+                            <label for="Reviewed"> Reviewed </label><br>    
+                            <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform"><br>
+                            <label >Task Create By: {{ fuselages.CreateBy }}</label><br>
+                            <label >Last Update: {{ cockpits.Update_Date|date:"D d M Y H:i" }} By:
+                                {% if fuselages.Update_By == '' %}
+                                    NONE
+                                {% else %}
+                                    {{ fuselages.Update_By }}
+                                {% endif %}   </label>                          
+                        </form>
+                    </div>
+                </div>
+            </div>    
+            {% endfor %}
+        </div>
+        <br>
+        <a href="#engine" class="btn btn-info" data-toggle="collapse"><span>Engine</span><span class="zone_task_count">Total : {{ engine_count }}</span></a>
+        <div id="engine" class="collapse zone">
+            {% for engines in engine %}
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ engines.id }}"><span class="text_btn">Task ID {{ engines.id }} : {{ engines.Task_name }}</span><span class="zone_task_assign">Assign To : {{ engines.Assign }}</span></button>
+            <div id="{{ engines.id }}" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content"> 
+                        <form method="POST" class="form-group">
+                            {% csrf_token %}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                            <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ engines.id }}" hidden>
+                            <label for="id_Task_name">Task name:</label> <input disabled type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ engines.Task_name }}">
+                            <label for="id_Task_Detail">Task Detail:</label> <textarea disabled name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ engines.Task_Detail }}</textarea>
+                            <label for="id_Task_Detail">Task Performed:</label> <textarea disabled name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ engines.Task_Performed }}</textarea>
+                            <label for="id_DueDate">DueDate: {{ engines.DueDate|date:"D d M Y" }}</label>
+                            <label for="id_Assign">Assign:</label> <select disabled  name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ engines.Assign }}">
+                                {% for mechanics in mechanic %}
+                                    {% if mechanics.first_name == engines.Assign %}
+                                        <option selected>ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% else %}
+                                        <option >ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% endif %}
+                                {% endfor %}
+                            {% if engines.Reviewed == True %}
+                            <input class="reviewcheck" type="checkbox" disabled checked id="Reviewed" name="Reviewed" value="{{ engines.Reviewed|yesno:"False,True" }}">
+                            {% else %}    
+                            <input class="reviewcheck" type="checkbox" disabled id="Reviewed" name="Reviewed" value="{{ engines.Reviewed|yesno:"False,True" }}">
+                            {% endif %} 
+                            <label for="Reviewed"> Reviewed </label><br>    
+                            <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform"><br>
+                            <label >Task Create By: {{ engines.CreateBy }}</label><br>
+                            <label >Last Update: {{ cockpits.Update_Date|date:"D d M Y H:i" }} By:
+                                {% if engines.Update_By == '' %}
+                                    NONE
+                                {% else %}
+                                    {{ engines.Update_By }}
+                                {% endif %}   </label>                          
+                        </form>
+                    </div>
+                </div>
+            </div>    
+            {% endfor %}
+        </div>
+        <br>
+        <a href="#empennage" class="btn btn-info" data-toggle="collapse"><span>Empennage</span><span class="zone_task_count">Total : {{ empennage_count }}</span></a>
+        <div id="empennage" class="collapse zone">
+            {% for empennages in empennage %}
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ empennages.id }}"><span class="text_btn">Task ID {{ empennages.id }} : {{ empennages.Task_name }}</span><span class="zone_task_assign">Assign To : {{ empennages.Assign }}</span></button>
+            <div id="{{ empennages.id }}" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content"> 
+                        <form method="POST" class="form-group">
+                            {% csrf_token %}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                            <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ empennages.id }}" hidden>
+                            <label for="id_Task_name">Task name:</label> <input disabled type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ empennages.Task_name }}">
+                            <label for="id_Task_Detail">Task Detail:</label> <textarea disabled name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ empennages.Task_Detail }}</textarea>
+                            <label for="id_Task_Detail">Task Performed:</label> <textarea name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ empennages.Task_Performed }}</textarea>
+                            <label for="id_DueDate">DueDate: {{ empennages.DueDate|date:"D d M Y" }}</label>
+                            <label for="id_Assign">Assign:</label> <select disabled  name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ empennages.Assign }}">
+                                {% for mechanics in mechanic %}
+                                    {% if mechanics.first_name == empennages.Assign %}
+                                        <option selected>ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% else %}
+                                        <option >ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% endif %}
+                                {% endfor %}
+                            {% if empennages.Reviewed == True %}
+                            <input class="reviewcheck" type="checkbox" disabled checked id="Reviewed" name="Reviewed" value="{{ empennages.Reviewed|yesno:"False,True" }}">
+                            {% else %}    
+                            <input class="reviewcheck" type="checkbox" disabled id="Reviewed" name="Reviewed" value="{{ empennages.Reviewed|yesno:"False,True" }}">
+                            {% endif %} 
+                            <label for="Reviewed"> Reviewed </label><br>    
+                            <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform"><br>
+                            <label >Task Create By: {{ empennages.CreateBy }}</label><br>
+                            <label >Last Update: {{ cockpits.Update_Date|date:"D d M Y H:i" }} By:
+                                {% if empennages.Update_By == '' %}
+                                    NONE
+                                {% else %}
+                                    {{ empennages.Update_By }}
+                                {% endif %}   </label>                          
+                        </form>
+                    </div>
+                </div>
+            </div>    
+            {% endfor %}
+        </div>
+        <br>
+        <a href="#avionic" class="btn btn-info" data-toggle="collapse"><span>Avionic</span><span class="zone_task_count">Total : {{ avionic_count }}</span></a>
+        <div id="avionic" class="collapse zone">
+            {% for avionics in avionic %}
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ avionics.id }}"><span class="text_btn">Task ID {{ avionics.id }} : {{ avionics.Task_name }}</span><span class="zone_task_assign">Assign To : {{ avionics.Assign }}</span></button>
+            <div id="{{ avionics.id }}" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content"> 
+                        <form method="POST" class="form-group">
+                            {% csrf_token %}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                            <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ avionics.id }}" hidden>
+                            <label for="id_Task_name">Task name:</label> <input disabled type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ avionics.Task_name }}">
+                            <label for="id_Task_Detail">Task Detail:</label> <textarea disabled name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ avionics.Task_Detail }}</textarea>
+                            <label for="id_Task_Detail">Task Performed:</label> <textarea name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ avionics.Task_Performed }}</textarea>
+                            <label for="id_DueDate">DueDate: {{ avionics.DueDate|date:"D d M Y" }}</label>
+                            <label for="id_Assign">Assign:</label> <select disabled name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ avionics.Assign }}">
+                                {% for mechanics in mechanic %}
+                                    {% if mechanics.first_name == avionics.Assign %}
+                                        <option selected>ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% else %}
+                                        <option >ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                    {% endif %}
+                                {% endfor %}
+                            {% if avionics.Reviewed == True %}
+                            <input class="reviewcheck" type="checkbox" disabled checked id="Reviewed" name="Reviewed" value="{{ avionics.Reviewed|yesno:"False,True" }}">
+                            {% else %}    
+                            <input class="reviewcheck" type="checkbox" disabled id="Reviewed" name="Reviewed" value="{{ avionics.Reviewed|yesno:"False,True" }}">
+                            {% endif %} 
+                            <label for="Reviewed"> Reviewed </label><br>    
+                            <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform"><br>
+                            <label >Task Create By: {{ avionics.CreateBy }}</label><br>
+                            <label >Last Update: {{ cockpits.Update_Date|date:"D d M Y H:i" }} By:
+                                {% if avionics.Update_By == '' %}
+                                    NONE
+                                {% else %}
+                                    {{ avionics.Update_By }}
+                                {% endif %}   </label>                          
+                        </form>
+                    </div>
+                </div>
+            </div>    
+            {% endfor %}
+        </div>
+        <br>
+    </div>  
+</body>
+
+{% endblock %}

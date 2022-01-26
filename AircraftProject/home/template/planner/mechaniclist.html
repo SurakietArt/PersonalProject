@@ -1,0 +1,65 @@
+{% extends 'planner/base.html' %}
+{% block content %}
+    {% if mechanic %}
+    <head>
+        <title>Mechanic List : Aircraft Maintenance</title>
+    </head>
+    <div style="margin-top:30px"></div>
+    {% for key,value in mechanic_list.items %}
+    <a href="#{{ key.first_name }}" class="btn btn-info" data-toggle="collapse"><span>ID {{ key.id }} : {{ key.first_name }}</span><span class="zone_task_count">Total : {{ value }}</span></a>
+    <div id="{{ key.first_name }}" class="collapse zone">
+                    {% for tasks in task %}
+                    {% if key.first_name == tasks.Assign %}
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ tasks.id }}"><span class="text_btn">ID {{ tasks.id }} : {{ tasks.Task_name }}</span></button>
+                        <div id="{{ tasks.id }}" class="modal fade" tabindex="-1" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content"> 
+                                    <form method="POST" class="form-group">
+                                        {% csrf_token %}
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                                        <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ tasks.id }}" hidden>
+                                        <label for="id_Task_name">Task name:</label> <input type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ tasks.Task_name }}">
+                                        <label for="id_Zone">Zone:</label> <input disabled type="text" name="Zone" class="form-control" maxlength="127" id="id_Zone"  value="{{ tasks.Zone }}">
+                                        <label for="id_Task_Detail">Task Detail:</label> <textarea name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ tasks.Task_Detail }}</textarea>
+                                        <label for="id_Task_Detail">Task Performed:</label> <textarea name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ tasks.Task_Performed }}</textarea>
+                                        <label for="id_DueDate">DueDate: {{ tasks.DueDate|date:"D d M Y" }}</label>
+                                        <input type="date" name="DueDate" value="{{ tasks.DueDate }}" class="form-control" id="id_DueDate">
+                                        <input type="hidden" name="initial-DueDate" value="{{ tasks.DueDate }}" id="initial-id_DueDate">
+                                        <label for="id_Assign">Assign:</label> <select  name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ tasks.Assign }}">
+                                            {% for mechanics in mechanic %}
+                                                {% if mechanics.first_name == tasks.Assign %}
+                                                    <option selected>ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                                {% else %}
+                                                    <option >ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% if tasks.Reviewed == True %}
+                                        <input class="reviewcheck" type="checkbox" checked id="Reviewed" name="Reviewed" value="{{ tasks.Reviewed|yesno:"False,True" }}">
+                                        {% else %}    
+                                        <input class="reviewcheck" type="checkbox" id="Reviewed" name="Reviewed" value="{{ tasks.Reviewed|yesno:"False,True" }}">
+                                        {% endif %} 
+                                        <label for="Reviewed"> Reviewed </label><br>    
+                                        <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform">
+                                        <button type="submit" onclick="if(confirm('Do you want to DELETE ?')){}else{return false;};" name="delete_task" value="{{ tasks.id }}" id="{{ tasks.id }}" class="btn btn-danger submitupdateform delete_btn">Delete</button><br>
+                                        <label >Task Create By: {{ tasks.CreateBy }}</label><br>
+                                        <label >Last Update: {{ tasks.Update_Date|date:"D d M Y H:i" }} By: 
+                                            {% if tasks.Update_By == '' %}
+                                                NONE
+                                            {% else %}
+                                                {{ tasks.Update_By }}
+                                            {% endif %}   </label>                          
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                    {% endif %}
+                    {% endfor %}
+            </div>
+    </div>
+    {% endfor %}
+    {% else %}
+        <h1 style="text-align: center; margin-top: 30px;">Task Not Found.</h1>
+    {% endif %}
+    
+{% endblock %}
