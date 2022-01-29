@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'home',
     'django_static_fontawesome',
     'bootstrap5',
+    'rest_framework',
 
 ]
 
