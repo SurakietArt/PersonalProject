@@ -12,6 +12,4 @@ urlpatterns = [
     path('mytask_reviewed/<str:first_name>/<str:user_id>/<str:position>', mytask_reviewed, name='mytask_reviewed'),
     path('mytask_wait_review/<str:first_name>/<str:user_id>/<str:position>', mytask_wait_review, name='mytask_wait_review'),
     path('signout', signout, name = 'signout'),
-    path('api-auth/', include('rest_framework.urls')),
-
 ]

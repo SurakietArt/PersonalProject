@@ -1,0 +1,53 @@
+{% extends 'mechanic/base.html' %}
+{% block content %}
+    <head>
+        <title>My Task : Aircraft Maintenance</title>
+    </head>
+    {% if wait_review %}
+    <div style="margin-top:30px"></div>
+    {% for wait_reviews in wait_review %}
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ wait_reviews.id }}"><span class="text_btn">ID {{ wait_reviews.id }} : {{ wait_reviews.Task_name }}</span><span class="zone_task_assign">Assign To : {{ wait_reviews.Assign }}</span></button>
+    <div id="{{ wait_reviews.id }}" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content"> 
+                <form method="POST" class="form-group">
+                    {% csrf_token %}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                    <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ wait_reviews.id }}" hidden>
+                    <label for="id_Task_name">Task name:</label> <input disabled type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ wait_reviews.Task_name }}">
+                    <label for="id_Zone">Zone:</label> <input disabled type="text" name="Zone" class="form-control" maxlength="127" id="id_Zone"  value="{{ wait_reviews.Zone }}">
+                    <label for="id_Task_Detail">Task Detail:</label> <textarea disabled name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ wait_reviews.Task_Detail }}</textarea>
+                    <label for="id_Task_Detail">Task Performed:</label> <textarea name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ wait_reviews.Task_Performed }}</textarea>
+                    <label for="id_DueDate">DueDate: {{ wait_reviews.DueDate|date:"D d M Y" }}</label>
+                    <label for="id_Assign">Assign:</label> <select disabled name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ wait_reviews.Assign }}">
+                        {% for mechanics in mechanic %}
+                        {% if mechanics.first_name == wait_reviews.Assign %}
+                            <option selected>ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                        {% else %}
+                            <option >ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                        {% endif %}
+                    {% endfor %}
+                    {% if wait_reviews.Reviewed == True %}
+                    <input class="reviewcheck" type="checkbox" disabled checked id="Reviewed" name="Reviewed" value="{{ wait_reviews.Reviewed|yesno:"False,True" }}">
+                    {% else %}    
+                    <input class="reviewcheck" type="checkbox" disabled id="Reviewed" name="Reviewed" value="{{ wait_reviews.Reviewed|yesno:"False,True" }}">
+                    {% endif %} 
+                    <label for="Reviewed"> Reviewed </label><br>    
+                    <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform"><br>
+                    <label >Task Create By: {{ wait_reviews.CreateBy }}</label><br>
+                    <label >Last Update: {{ wait_reviews.Update_Date|date:"D d M Y H:i" }} By: 
+                        {% if wait_reviews.Update_By == '' %}
+                            NONE
+                        {% else %}
+                            {{ wait_reviews.Update_By }}
+                        {% endif %}   </label>                          
+                </form>
+            </div>
+        </div>
+    </div>    
+    {% endfor %}
+    {% else %}
+        <h1 style="text-align: center; margin-top: 30px;">No Tasks That You Have Been Assigned.</h1>
+    {% endif %}
+    
+{% endblock %}

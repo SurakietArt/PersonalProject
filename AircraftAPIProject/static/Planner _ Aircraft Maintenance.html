@@ -1,0 +1,52 @@
+{% for cockpits in cockpit %}
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ cockpits.id }}"><span class="text_btn">{{ cockpits.Task_name }}</span><span class="zone_task_assign">Assign To : {{ cockpits.Assign }}</span></button>
+<div id="{{ cockpits.id }}" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content"> 
+            <form method="POST" class="form-group">
+                <p><label for="id_Task_name">Task name:</label> <input type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name" disabled placeholder="{{ cockpits.Task_name }}"></p>
+            <p><label for="id_Zone">Zone:</label> <select name="Zone" class="form-control" id="id_Zone" disabled>
+            <option selected="" value="{{ cockpits.Zone }}" ></option>      
+            </select></p>
+            <p><label for="id_Task_Detail">Task Detail:</label> <textarea name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail">{{ cockpits.Task_Detail }}</textarea></p>
+            <p><label for="id_Assign">Assign:</label> <select disabled name="Assign" class="form-control" maxlength="127" id="id_Assign">
+            <option value="test_mechanic">{{ cockpits.Assign }}</option>    
+            </select></p>
+            <p><label for="id_DueDate">DueDate:</label> <input disabled type="date" name="DueDate" class="form-control" id="id_DueDate" placeholder="{{ cockpits.DueDate }}"><input type="hidden" name="initial-DueDate" id="initial-id_DueDate"></p>
+            <p><label for="id_DueDate">Create Date:</label> <input disabled type="date" name="DueDate" class="form-control" id="id_DueDate" placeholder="{{ cockpits.Date }}"><input type="hidden" name="initial-Date" id="initial-id_Date"></p>
+                <input type="submit" value="Submit" class="btn btn-primary">
+                </form>
+        </div>
+    </div>
+</div>    
+{% endfor %}
+
+<form method="POST" class="form-group">
+    <p><label for="id_Task_name">Task name:</label> <input type="text" name="Task_name" class="form-control" maxlength="127" required="" id="id_Task_name"></p>
+<p><label for="id_Zone">Zone:</label> <select name="Zone" class="form-control" id="id_Zone">
+<option value="0" selected="">Cockpit</option>
+
+<option value="1">Cabin</option>
+
+<option value="2">Wing</option>
+
+<option value="3">Landing Gear</option>
+
+<option value="4">Fuselage</option>
+
+<option value="5">Engine</option>
+
+<option value="6">Empennage</option>
+
+<option value="7">Avionic</option>
+
+</select></p>
+<p><label for="id_Task_Detail">Task Detail:</label> <textarea name="Task_Detail" cols="40" rows="10" class="form-control" required="" id="id_Task_Detail"></textarea></p>
+<p><label for="id_Assign">Assign:</label> <select name="Assign" class="form-control" maxlength="127" id="id_Assign">
+<option value="test_mechanic">test_mechanic</option>
+<option value="Surakiet">Surakiet</option>
+</select></p>
+<p><label for="id_DueDate">DueDate:</label> <input type="date" name="DueDate" value="12092021-190735" class="form-control" id="id_DueDate"><input type="hidden" name="initial-DueDate" value="12092021-190735" id="initial-id_DueDate"></p>
+
+    <input type="submit" value="Submit" class="btn btn-primary">
+    </form>

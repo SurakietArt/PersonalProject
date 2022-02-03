@@ -1,0 +1,56 @@
+{% extends 'mechanic/base.html' %}
+{% block content %}
+    <head>
+        <title>Search : Aircraft Maintenance</title>
+    </head>
+    {% if result %}
+    <div style="margin-top:30px"></div>
+    {% for results in result %}
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ results.id }}"><span class="text_btn">ID {{ results.id }} : {{ results.Task_name }}</span><span class="zone_task_assign">Assign To : {{ results.Assign }}</span></button>
+    <div id="{{ results.id }}" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content"> 
+                <form method="POST" class="form-group">
+                    {% csrf_token %}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                    <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ results.id }}" hidden>
+                    <label for="id_Task_name">Task name:</label> <input type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ results.Task_name }}">
+                    <label for="id_Zone">Zone:</label> <input disabled type="text" name="Zone" class="form-control" maxlength="127" id="id_Zone"  value="{{ results.Zone }}">
+                    <label for="id_Task_Detail">Task Detail:</label> <textarea name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ results.Task_Detail }}</textarea>
+                    <label for="id_Task_Detail">Task Performed:</label> <textarea name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ results.Task_Performed }}</textarea>
+                    <label for="id_DueDate">DueDate: {{ results.DueDate|date:"D d M Y" }}</label>
+                    <input type="date" name="DueDate" value="{{ results.DueDate }}" class="form-control" id="id_DueDate">
+                    <input type="hidden" name="initial-DueDate" value="{{ results.DueDate }}" id="initial-id_DueDate">
+                    <label for="id_Assign">Assign:</label> <select  name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ results.Assign }}">
+                        {% for mechanics in mechanic %}
+                            {% if mechanics == results.Assign %}
+                                <option selected>{{ mechanics }}</option> 
+                            {% else %}
+                                <option >{{ mechanics }}</option> 
+                            {% endif %}
+                        {% endfor %}
+                    {% if results.Reviewed == True %}
+                    <input class="reviewcheck" type="checkbox" checked id="Reviewed" name="Reviewed" value="{{ results.Reviewed|yesno:"False,True" }}">
+                    {% else %}    
+                    <input class="reviewcheck" type="checkbox" id="Reviewed" name="Reviewed" value="{{ results.Reviewed|yesno:"False,True" }}">
+                    {% endif %} 
+                    <label for="Reviewed"> Reviewed </label><br>    
+                    <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform">
+                    <button type="submit" onclick="if(confirm('Do you want to DELETE ?')){}else{return false;};" name="delete_task" value="{{ results.id }}" id="{{ results.id }}" class="btn btn-danger submitupdateform delete_btn">Delete</button><br>
+                    <label >Task Create By: {{ results.CreateBy }}</label><br>
+                    <label >Last Update: {{ results.Update_Date|date:"D d M Y H:i" }} By: 
+                        {% if results.Update_By == '' %}
+                            NONE
+                        {% else %}
+                            {{ results.Update_By }}
+                        {% endif %}   </label>                          
+                </form>
+            </div>
+        </div>
+    </div>    
+    {% endfor %}
+    {% else %}
+        <h1 style="text-align: center; margin-top: 30px;">Task Not Found.</h1>
+    {% endif %}
+    
+{% endblock %}

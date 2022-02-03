@@ -1,0 +1,56 @@
+{% extends 'planner/base.html' %}
+{% block content %}
+    <head>
+        <title>Over Due Task : Aircraft Maintenance</title>
+    </head>
+    {% if task_overdue %}
+    <div style="margin-top:30px"></div>
+    {% for task_overdues in task_overdue %}
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#{{ task_overdues.id }}"><span class="text_btn">ID {{ task_overdues.id }} : {{ task_overdues.Task_name }}</span><span class="zone_task_assign">Assign To : {{ task_overdues.Assign }}</span></button>
+    <div id="{{ task_overdues.id }}" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content"> 
+                <form method="POST" class="form-group">
+                    {% csrf_token %}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">Close</button>
+                    <label for="id_TASK_ID" hidden>TASK ID</label> <input type="text" name="id" class="form-control" maxlength="127" id="id"  value="{{ task_overdues.id }}" hidden>
+                    <label for="id_Task_name">Task name:</label> <input type="text" name="Task_name" class="form-control" maxlength="127" id="id_Task_name"  value="{{ task_overdues.Task_name }}">
+                    <label for="id_Zone">Zone:</label> <input disabled type="text" name="Zone" class="form-control" maxlength="127" id="id_Zone"  value="{{ task_overdues.Zone }}">
+                    <label for="id_Task_Detail">Task Detail:</label> <textarea name="Task_Detail" cols="40" rows="10" class="form-control" id="id_Task_Detail" >{{ task_overdues.Task_Detail }}</textarea>
+                    <label for="id_Task_Detail">Task Performed:</label> <textarea name="Task_Performed" cols="40" rows="10" class="form-control" id="id_Task_Performed" >{{ task_overdues.Task_Performed }}</textarea>
+                    <label for="id_DueDate">DueDate: {{ task_overdues.DueDate|date:"D d M Y" }}</label>
+                    <input type="date" name="DueDate" value="{{ task_overdues.DueDate }}" class="form-control" id="id_DueDate">
+                    <input type="hidden" name="initial-DueDate" value="{{ task_overdues.DueDate }}" id="initial-id_DueDate">
+                    <label for="id_Assign">Assign:</label> <select  name="Assign" class="form-control" maxlength="127" id="id_Assign" value="{{ task_overdues.Assign }}">
+                        {% for mechanics in mechanic %}
+                            {% if mechanics.first_name == task_overdues.Assign %}
+                                <option selected>ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                            {% else %}
+                                <option >ID {{ mechanics.id }} : {{ mechanics.first_name }}</option> 
+                            {% endif %}
+                        {% endfor %}
+                    {% if task_overdues.Reviewed == True %}
+                    <input class="reviewcheck" type="checkbox" checked id="Reviewed" name="Reviewed" value="{{ task_overdues.Reviewed|yesno:"False,True" }}">
+                    {% else %}    
+                    <input class="reviewcheck" type="checkbox" id="Reviewed" name="Reviewed" value="{{ task_overdues.Reviewed|yesno:"False,True" }}">
+                    {% endif %} 
+                    <label for="Reviewed"> Reviewed </label><br>    
+                    <input type="submit" value="Submit" name="update_form" class="btn btn-primary submitupdateform">
+                    <button type="submit" onclick="if(confirm('Do you want to DELETE ?')){}else{return false;};" name="delete_task" value="{{ task_overdues.id }}" id="{{ task_overdues.id }}" class="btn btn-danger submitupdateform delete_btn">Delete</button><br>
+                    <label >Task Create By: {{ task_overdues.CreateBy }}</label><br>
+                    <label >Last Update: {{ task_overdues.Update_Date|date:"D d M Y H:i" }} By: 
+                        {% if task_overdues.Update_By == '' %}
+                            NONE
+                        {% else %}
+                            {{ task_overdues.Update_By }}
+                        {% endif %}   </label>                          
+                </form>
+            </div>
+        </div>
+    </div>    
+    {% endfor %}
+    {% else %}
+        <h1 style="text-align: center; margin-top: 30px;">No Overdue Date Task.</h1>
+    {% endif %}
+    
+{% endblock %}
