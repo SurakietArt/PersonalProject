@@ -785,7 +785,14 @@ def mechanic(request,first_name,position,user_id):
                 result = Task.objects.filter(Q(id__icontains=lk))
                 if result == '<QuerySet []>':
                     result = 'Task Not Found.'
-                    return render(request,"search.html",{"result":result})
+                    return render(request,"search.html",{
+                        "result":result,
+                        "first_name":first_name,
+                        "position":position,
+                        "mechanic":mechanic,
+                        "task_overdue_count":task_overdue_count,
+                        "my_task_count":my_task_count,
+                        "user_id":user_id,})
                 return render(request,"mechanic/search.html",{
                     "result":result,
                     "first_name":first_name,
